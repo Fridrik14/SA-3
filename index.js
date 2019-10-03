@@ -26,9 +26,10 @@ app.post('/api/candies', function(req, res) {
 });
 
 //TODO Get all nested candies within offers
+    //WIP Calling getCandiesFromOffers() atm for debugging purposes
 //Model structure
 app.get('/api/offers', function(req, res) {
-    return res.json(offerService.getAllOffers());
+    return res.json(offerService.getCandiesFromOffers());
 });
 
 //No model validation
