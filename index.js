@@ -1,15 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const app = express();
 const candyService = require('./services/candyservice');
 const pinataService = require('./services/pinataservice');
 const offerService = require('./services/offerservice');
+const surpriseFile = 'surprise.txt';
 
 app.use(bodyParser.json());
 
 //No model validation
 app.get('/api/candies', function(req, res) {
-    return res.json(candyService.getAllCandies());
+    return res.json(candyService.getAllCandies()); 
 });
 
 app.get('/api/candies/:candyId', function(req, res) {
@@ -43,6 +45,8 @@ app.get('/api/pinatas/:pinataId', function(req, res) {
 });
 //Surprise included
 app.post('/api/pinatas', function(req, res) {
+    // add secret to the new pinata
+    req.body.surprise = "This is surpirse text for "+req.body.name;
     pinataService.createNewPinata(req.body);
 
     return res.status(201).send(req.body);
@@ -51,6 +55,10 @@ app.post('/api/pinatas', function(req, res) {
 app.put('/api/pinatas/:pinataId/hit', function(req, res) {
     const pinataId = req.params.pinataId;
     var result = pinataService.getPinataById(pinataId);
+    // if the pinata has already max hit has already been reached
+    if((result.hasOwnProperty('maxReached:'))){
+        return res.status(423);
+    }
     //Check if pinata object has currentHit element, if not give object element
     if(!(result.hasOwnProperty('currentHit:'))){
         result['currentHit'] = '1';
@@ -60,11 +68,20 @@ app.put('/api/pinatas/:pinataId/hit', function(req, res) {
         result.currentHit += 1;
         //Check if limit has been reached, return 200 OK and surprise in body
         if(result.currentHit == result.maximumHits){
+            result["maxReached"] = true;
             //TODO: EF surprise er texti:
             //      Appenda surprise text í surprise.txt í root 
             //      EF surprise er URL:
             //      Download using the request package
             //      Pipe into a /images using a write stream
+            const surprise = result.surprise;
+            
+            fs.appendFile(surpriseFile, surprise+"\n", function(err) {
+                if(err) {
+                    return console.log(err);
+                }
+                console.log("The file was saved!");
+            });
             return res.status(200).send(result.surprise)
         }
         //Limit not reached, return 204 and do nothing

@@ -26,6 +26,9 @@ function getPinataById(id){
 };
 
 function createNewPinata(pinata){
+    // gets the highest id in the list and returns it +1 which would be the next id
+    const nextId = 1+Math.max.apply(Math, data.pinatas.map(function(u) { return u.id; }));
+    pinata["id"] = nextId;
     data.pinatas.push(pinata);
 };
 
