@@ -29,7 +29,7 @@ app.post('/api/candies', function(req, res) {
     //WIP Calling getCandiesFromOffers() atm for debugging purposes
 //Model structure
 app.get('/api/offers', function(req, res) {
-    return res.json(offerService.getCandiesFromOffers());
+    return res.json(offerService.getAllOffers());
 });
 
 //No model validation
