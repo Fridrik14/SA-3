@@ -59,15 +59,15 @@ app.put('/api/pinatas/:pinataId/hit', function(req, res) {
     if((result.hasOwnProperty('maxReached:'))){
         return res.status(423);
     }
-    //Check if pinata object has currentHit element, if not give object element
-    if(!(result.hasOwnProperty('currentHit:'))){
-        result['currentHit'] = '1';
+    //Check if pinata object has currentHits element, if not give object element
+    if(!(result.hasOwnProperty('currentHits:'))){
+        result['currentHits'] = '1';
     }
     //If pinata object has currentHit, increase hit by one
     else{
-        result.currentHit += 1;
+        result.currentHits += 1;
         //Check if limit has been reached, return 200 OK and surprise in body
-        if(result.currentHit == result.maximumHits){
+        if(result.currentHits == result.maximumHits){
             result["maxReached"] = true;
             //TODO: EF surprise er texti:
             //      Appenda surprise text í surprise.txt í root 
