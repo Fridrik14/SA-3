@@ -12,9 +12,9 @@ function getAllOffers(){
             if(key == 'candies'){
                 for (var index = 0; index < obj[key].length; index++){
                     result.push(candyService.getCandyById(obj[key][index]));
-}
-                var test = {"id": obj['id'], "name": obj['name'], "candies": result};
-                completeOffers.push(test);
+                }
+                var temp = {"id": obj['id'], "name": obj['name'], "candies": result};
+                completeOffers.push(temp);
             }
         }
     }
