@@ -21,7 +21,6 @@ app.get('/api/candies/:candyId', function(req, res) {
 
 app.post('/api/candies', function(req, res) {
     //Create new candy from body
-    //TODO selfgenerate new id?
     candyService.createNewCandy(req.body);
     //Return correct response along with new candy
     return res.status(201).send(req.body);
@@ -53,15 +52,9 @@ app.post('/api/pinatas', function(req, res) {
 });
 
 app.put('/api/pinatas/:pinataId/hit', function(req, res) {
-    //Check if pinata object has currentHits element, if not give object element
-    // if(!(result.hasOwnProperty('currentHits:'))){
-    //     result['currentHits'] = '1';
-    // }
-
-
     const pinataId = req.params.pinataId;
     var result = pinataService.getPinataById(pinataId);
-    // if the pinata has already max hit has already been reached
+    //If the pinata has already max hit has already been reached
     if((result.hasOwnProperty('maxReached:'))){
         return res.status(423);
     }
@@ -71,13 +64,7 @@ app.put('/api/pinatas/:pinataId/hit', function(req, res) {
         //Check if limit has been reached, return 200 OK and surprise in body
         if(result.currentHits == result.maximumHits){
             result["maxReached"] = true;
-            //TODO: EF surprise er texti:
-            //      Appenda surprise text í surprise.txt í root 
-            //      EF surprise er URL:
-            //      Download using the request package
-            //      Pipe into a /images using a write stream
             const surprise = result.surprise;
-            
             fs.appendFile(surpriseFile, surprise+"\n", function(err) {
                 if(err) {
                     return console.log(err);

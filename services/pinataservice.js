@@ -3,7 +3,6 @@ const data = require('../data/data.json');
 function getAllPinatas(){
     var result = data.pinatas;
     var completedPinatas = [];
-    //TODO Tékka hvort currentHits sé til?
     for (var i = 0; i < result.length; i++) {
         var temp = { 
             "id": result[i].id, 
