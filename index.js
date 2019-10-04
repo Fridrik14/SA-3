@@ -53,15 +53,17 @@ app.post('/api/pinatas', function(req, res) {
 });
 
 app.put('/api/pinatas/:pinataId/hit', function(req, res) {
+    //Check if pinata object has currentHits element, if not give object element
+    // if(!(result.hasOwnProperty('currentHits:'))){
+    //     result['currentHits'] = '1';
+    // }
+
+
     const pinataId = req.params.pinataId;
     var result = pinataService.getPinataById(pinataId);
     // if the pinata has already max hit has already been reached
     if((result.hasOwnProperty('maxReached:'))){
         return res.status(423);
-    }
-    //Check if pinata object has currentHits element, if not give object element
-    if(!(result.hasOwnProperty('currentHits:'))){
-        result['currentHits'] = '1';
     }
     //If pinata object has currentHit, increase hit by one
     else{
@@ -92,4 +94,5 @@ app.put('/api/pinatas/:pinataId/hit', function(req, res) {
 //Localhost:3000
 app.listen(3000, function() {
     console.log('Server is listening on port 3000');
+    pinataService.addCounter();
 });
